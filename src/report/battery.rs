@@ -33,7 +33,7 @@ pub fn get(device: &HidDevice, wired: bool) {
     }
 
     match (status, wired) {
-        (0, false) => println!("{}%", percentage),
+        (0, false) => println!("{percentage}%"),
         (0, true) => {
             let charging_status = match percentage {
                 0..=24 => "charging".red(),
@@ -41,7 +41,7 @@ pub fn get(device: &HidDevice, wired: bool) {
                 75..=99 => "charging".green(),
                 100.. => "fully charged".green().bold(),
             };
-            println!("{}% ({})", percentage, charging_status)
+            println!("{percentage}% ({charging_status})")
         }
         (1, _) => println!("(asleep)"),
         (3, _) => print!("(waking up)"),

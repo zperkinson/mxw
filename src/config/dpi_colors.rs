@@ -1,4 +1,4 @@
-use crate::lib::color::Color;
+use crate::libs::color::Color;
 use hidapi::HidDevice;
 
 const PROFILE_DEFAULT: u8 = 1;

@@ -114,7 +114,10 @@ fn rate_check(rate: Option<u8>, effect_id: u8) -> u8 {
     let rate_checked = match rate_unwrapped {
         0..=100 => rate_unwrapped,
         _ => {
-            println!("{}: Rate must be 0-100!", "Error".bold().red());
+            println!(
+                "{}: rate must be in the range of 0-100",
+                "error".bold().red()
+            );
             process::exit(1);
         }
     };

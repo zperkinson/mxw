@@ -1,12 +1,12 @@
 pub mod args;
 pub mod config;
+pub mod libs;
 pub mod report;
-pub mod lib;
 
 use args::{Args, Config, Kind, Report};
 use clap::Parser;
 use hidapi::HidApi;
-use lib::none::None;
+use libs::none::None;
 
 fn main() {
     // Parse the command line arguments
@@ -22,7 +22,7 @@ fn main() {
             // Glorious' vendor id
             d.vendor_id() == 0x258A &&
 
-            // Model O/D product id
+            // Model O/D product id(s)
             [0x2011, 0x2022, 0x2012, 0x2023].contains(&d.product_id()) &&
 
             // Feature report interface
@@ -30,10 +30,10 @@ fn main() {
         })
         // Get wired (0x2011) if available
         .min_by(|a, b| a.product_id().cmp(&b.product_id()))
-        .none("No matching device found!");
+        .none("no matching device found");
 
     // Product id indicates whether wired
-    let wired = device_info.product_id() == 0x2011 || device_info.product_id() == 0x2012;
+    let wired = device_info.product_id() <= 0x2012;
 
     // Connect to the device
     let device = device_info.open_device(&hid_api).unwrap();
@@ -81,7 +81,7 @@ fn main() {
             Config::PollingRate { ms } => config::polling_rate::set(&device, ms),
 
             // mow config lift-off <MM>
-            Config::LiftOff { mm } => config::polling_rate::set(&device, mm),
+            Config::LiftOff { mm } => config::lift_off::set(&device, mm),
 
             // mow config debounce <MS>
             Config::Debounce { profile, ms } => config::debounce::set(&device, profile, ms),

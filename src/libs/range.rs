@@ -7,7 +7,7 @@ pub fn in_range(range: &'static RangeInclusive<usize>) -> impl Fn(&str) -> Resul
             .map_err(|error| error.to_string())
             .and_then(|result| match result {
                 true => Ok(()),
-                false => Err(format!("Not in range {}-{}!", range.start(), range.end())),
+                false => Err(format!("not in range {}-{}", range.start(), range.end())),
             })
     }
 }

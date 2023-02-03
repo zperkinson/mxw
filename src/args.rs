@@ -1,5 +1,5 @@
-use crate::lib::color::{self, Color};
-use crate::lib::key::{self, Key};
+use crate::libs::color::{self, Color};
+use crate::libs::key::{self, Key};
 use clap::{self, value_parser, Parser, Subcommand, ValueEnum};
 
 #[derive(Parser)]
@@ -11,10 +11,7 @@ use clap::{self, value_parser, Parser, Subcommand, ValueEnum};
     disable_help_subcommand = true,
 
     // Same reported version for subcommands
-    propagate_version = true,
-
-    // Prevent automatic uppercase short version
-    mut_arg("version", |x| { x.short('v') }),
+    propagate_version = true
 )]
 pub struct Args {
     #[clap(subcommand)]
@@ -134,13 +131,13 @@ pub enum Config {
     /// Lift-off distance in mm
     LiftOff {
         #[arg(value_parser(["1", "2"]))]
-        mm: u8,
+        mm: String,
     },
 
     /// Polling rate in ms
     PollingRate {
         #[clap(value_parser(["1", "2", "4", "8"]))]
-        ms: u8,
+        ms: String,
     },
 
     /// Debounce in ms (0-16)

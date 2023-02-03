@@ -34,7 +34,7 @@ pub fn set(device: &HidDevice, profile: Option<u8>, button: Button, binding: Bin
 
         Binding::None => (),
 
-        _ => println!("(not implemented)"),
+        _ => unimplemented!(),
     }
 
     device.send_feature_report(&bfr).unwrap();
@@ -63,7 +63,7 @@ pub fn set_and_check(device: &HidDevice, _bfr: &mut [u8], depth: u8, waiting: bo
             }
         }
     } else {
-        println!("{}: Failed setting key binding!", "Error".bold().red());
+        println!("{}: failed to bind key", "error".bold().red());
     }
 }
 

@@ -1,65 +1,65 @@
 use std::str::FromStr;
 
-pub fn parse_scan_code(str: &str) -> Result<Key, String> {
-    u8::from_str(str)
+pub fn parse_scan_code(keystr: &str) -> Result<Key, String> {
+    u8::from_str(keystr)
         .map(|value| KEYS.iter().find(|key| value == key.scan_code))
         .map_err(|error| error.to_string())
         .and_then(|value| match value {
             Some(value) => Ok(Key::from(value)),
-            None => Err(format!("Scan code '{}' not supported!", str)),
+            None => Err(format!("scan code '{keystr}' not supported")),
         })
 }
 
-pub fn parse_key_code(str: &str) -> Result<Key, String> {
-    u8::from_str(str)
+pub fn parse_key_code(keystr: &str) -> Result<Key, String> {
+    u8::from_str(keystr)
         .map(|value| KEYS.iter().find(|key| value == key.key_code))
         .map_err(|error| error.to_string())
         .and_then(|value| match value {
             Some(value) => Ok(Key::from(value)),
-            None => Err(format!("Key code '{}' not supported!", str)),
+            None => Err(format!("key code '{keystr}' not supported")),
         })
 }
 
-pub fn parse_code(str: &str) -> Result<Key, String> {
-    match KEYS.iter().find(|key| str == key.code) {
+pub fn parse_code(keystr: &str) -> Result<Key, String> {
+    match KEYS.iter().find(|key| keystr == key.code) {
         Some(value) => Ok(Key::from(value)),
-        None => Err(format!("Code '{}' not supported!", str)),
+        None => Err(format!("code '{keystr}' not supported")),
     }
 }
 
-pub fn parse_scan_code_mod(str: &str) -> Result<Key, String> {
-    u8::from_str(str)
+pub fn parse_scan_code_mod(keystr: &str) -> Result<Key, String> {
+    u8::from_str(keystr)
         .map(|value| KEYS.iter().find(|key| value == key.scan_code))
         .map_err(|error| error.to_string())
         .and_then(|value| match value {
             Some(value) => match value.modifier {
                 Some(_) => Ok(Key::from(value)),
-                None => Err(format!("Scan code '{}' not a valid modifier!", str)),
+                None => Err(format!("scan code '{keystr}' not a valid modifier")),
             },
-            None => Err(format!("Scan code '{}' not supported!", str)),
+            None => Err(format!("scan code '{keystr}' not supported")),
         })
 }
 
-pub fn parse_key_code_mod(str: &str) -> Result<Key, String> {
-    u8::from_str(str)
+pub fn parse_key_code_mod(keystr: &str) -> Result<Key, String> {
+    u8::from_str(keystr)
         .map(|value| KEYS.iter().find(|key| value == key.key_code))
         .map_err(|error| error.to_string())
         .and_then(|value| match value {
             Some(value) => match value.modifier {
                 Some(_) => Ok(Key::from(value)),
-                None => Err(format!("Key code '{}' not a valid modifier!", str)),
+                None => Err(format!("key code '{keystr}' not a valid modifier")),
             },
-            None => Err(format!("Key code '{}' not supported!", str)),
+            None => Err(format!("key code '{keystr}' not supported")),
         })
 }
 
-pub fn parse_code_mod(str: &str) -> Result<Key, String> {
-    match KEYS.iter().find(|key| str == key.code) {
+pub fn parse_code_mod(keystr: &str) -> Result<Key, String> {
+    match KEYS.iter().find(|key| keystr == key.code) {
         Some(value) => match value.modifier {
             Some(_) => Ok(Key::from(value)),
-            None => Err(format!("Code '{}' not a valid modifier!", str)),
+            None => Err(format!("code '{keystr}' not a valid modifier")),
         },
-        None => Err(format!("Code '{}' not supported!", str)),
+        None => Err(format!("code '{keystr}' not supported!")),
     }
 }
 

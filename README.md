@@ -75,3 +75,6 @@ I might at some point compile and upload a detailed writeup describing the proto
 Should you be so unlucky as to somehow brick your device (as I have done myself repeatedly while working on this project), there is the option of factory resetting by pressing down both left and right mouse buttons and the scroll wheel, and hold for five seconds while the device flashes green.
 
 However, I do not (yet) have insight into the inner workings of this device, and can therefore NOT guarantee all faults will be recoverable. Use this at your own risk!
+
+## Dev requirements:
+`libusb-1.0-0-dev`

@@ -10,7 +10,7 @@ impl<T> None<T> for Option<T> {
         match self {
             Option::Some(value) => value,
             Option::None => {
-                println!("{}: {}", "Error".bold().red(), message);
+                println!("{}: {}", "error".bold().red(), message);
                 process::exit(1);
             }
         }
