@@ -29,7 +29,7 @@ fn main() {
                 0x2013, // Model O- (wireless)
                 0x2022, // Model O (wired)
                 0x2023, // Model D (wired)
-                0x2024  // Model 0- (wired)
+                0x2024  // Model O- (wired)
             ].contains(&d.product_id()) &&
 
             // Feature report interface
