@@ -22,8 +22,15 @@ fn main() {
             // Glorious' vendor id
             d.vendor_id() == 0x258A &&
 
-            // Model O/D product id(s)
-            [0x2011, 0x2022, 0x2012, 0x2023].contains(&d.product_id()) &&
+            // Product IDs
+            [
+                0x2011, // Model O (wireless)
+                0x2012, // Model D (wireless)
+                0x2013, // Model O- (wireless)
+                0x2022, // Model O (wired)
+                0x2023, // Model D (wired)
+                0x2024  // Model 0- (wired)
+            ].contains(&d.product_id()) &&
 
             // Feature report interface
             d.interface_number() == 0x02
