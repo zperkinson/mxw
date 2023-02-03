@@ -40,7 +40,7 @@ fn main() {
         .none("no matching device found");
 
     // Product id indicates whether wired
-    let wired = device_info.product_id() <= 0x2012;
+    let wired = device_info.product_id() <= 0x2013;
 
     // Connect to the device
     let device = device_info.open_device(&hid_api).unwrap();
