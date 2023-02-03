@@ -1,5 +1,5 @@
-# Model O Wireless (mow)
-Cross platform CLI for configuring Glorious Model O Wireless.
+# mxw - Model (O/O-/D/D-) Wireless
+Cross platform CLI for configuring Glorious wireless mice.
 
 See the original project and it's README at [korkje/mow](https://github.com/korkje/mow).
 
