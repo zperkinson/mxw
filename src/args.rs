@@ -42,7 +42,7 @@ pub enum Report {
 pub enum Config {
     /// Active profile by id
     Profile {
-        #[arg(value_parser(["1", "2", "3"]))]
+        #[arg(value_parser = value_parser!(u8).range(1..=3))]
         id: u8,
     },
 
@@ -52,7 +52,7 @@ pub enum Config {
         #[arg(
             short, long,
             help = "[default: 1]",
-            value_parser(["1", "2", "3"]),
+            value_parser = value_parser!(u8).range(1..=3),
         )]
         profile: Option<u8>,
 
@@ -82,11 +82,11 @@ pub enum Config {
         #[arg(
             short, long,
             help = "[default: 1]",
-            value_parser(["1", "2", "3"]),
+            value_parser = value_parser!(u8).range(1..=3),
         )]
         profile: Option<u8>,
 
-        #[arg(value_parser(["1", "2", "3", "4"]))]
+        #[arg(value_parser = value_parser!(u8).range(1..=4))]
         id: u8,
     },
 
@@ -96,7 +96,7 @@ pub enum Config {
         #[arg(
             short, long,
             help = "[default: 1]",
-            value_parser(["1", "2", "3"])
+            value_parser = value_parser!(u8).range(1..=3)
         )]
         profile: Option<u8>,
 
@@ -115,7 +115,7 @@ pub enum Config {
         #[arg(
             short, long,
             help = "[default: 1]",
-            value_parser(["1", "2", "3"])
+            value_parser = value_parser!(u8).range(1..=3)
         )]
         profile: Option<u8>,
 
@@ -146,7 +146,7 @@ pub enum Config {
         #[arg(
             short, long,
             help = "[default: 1]",
-            value_parser(["1", "2", "3"]),
+            value_parser = value_parser!(u8).range(1..=3),
         )]
         profile: Option<u8>,
 
@@ -160,7 +160,7 @@ pub enum Config {
         #[arg(
             short, long,
             help = "[default: 1]",
-            value_parser(["1", "2", "3"]),
+            value_parser = value_parser!(u8).range(1..=3),
         )]
         profile: Option<u8>,
 

@@ -15,5 +15,5 @@ Windows program (Glorious Core).
 
 [dependencies]
 clap = { version = "4.1", features = ["derive"] }
-hidapi = "1.5"
+hidapi = "2.3"
 colored = "2.0"
