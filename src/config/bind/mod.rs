@@ -23,15 +23,10 @@ pub fn set(device: &HidDevice, profile: Option<u8>, button: Button, binding: Bin
 
     match binding {
         Binding::Key { kind } => key::set(&mut bfr[10..], kind),
-
         Binding::Mouse(mouse_fn) => mouse::set(&mut bfr[10..], mouse_fn),
-
         Binding::Keyboard(keyboard_fn) => keyboard::set(&mut bfr[10..], keyboard_fn),
-
         Binding::Media(media_fn) => media::set(&mut bfr[10..], media_fn),
-
         Binding::DPI(dpi_fn) => dpi::set(&mut bfr[10..], dpi_fn),
-
         Binding::None => (),
 
         _ => unimplemented!(),
@@ -42,28 +37,29 @@ pub fn set(device: &HidDevice, profile: Option<u8>, button: Button, binding: Bin
 }
 
 pub fn set_and_check(device: &HidDevice, _bfr: &mut [u8], depth: u8, waiting: bool) {
-    if depth < 3 {
-        if waiting {
-            thread::sleep(Duration::from_millis(100));
-            set_and_check(device, _bfr, depth + 1, true);
-        } else {
-            thread::sleep(Duration::from_millis(100));
-            let mut bfr = [0u8; 55];
-            device.get_feature_report(&mut bfr).unwrap();
-            thread::sleep(Duration::from_millis(40));
-
-            match bfr[0] {
-                0xA2 => {
-                    device.send_feature_report(_bfr).unwrap();
-                    set_and_check(device, _bfr, depth + 1, false)
-                }
-                0xA0 => set_and_check(device, _bfr, depth + 1, false),
-                0xA4 => set_and_check(device, _bfr, depth + 1, true),
-                _ => (),
-            }
-        }
-    } else {
+    if depth >= 3 {
         println!("{}: failed to bind key", "error".bold().red());
+    }
+
+    if waiting {
+        thread::sleep(Duration::from_millis(100));
+        set_and_check(device, _bfr, depth + 1, true);
+    } else {
+        thread::sleep(Duration::from_millis(100));
+        let mut bfr = [0u8; 55];
+        device.get_feature_report(&mut bfr).unwrap();
+        thread::sleep(Duration::from_millis(40));
+
+        match bfr[0] {
+            0xA2 => {
+                device.send_feature_report(_bfr).unwrap();
+                set_and_check(device, _bfr, depth + 1, false)
+            }
+            0xA0 => set_and_check(device, _bfr, depth + 1, false),
+            0xA4 => set_and_check(device, _bfr, depth + 1, true),
+
+            _ => (),
+        }
     }
 }
 
