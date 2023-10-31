@@ -9,11 +9,11 @@ use colored::Colorize;
 use hidapi::HidDevice;
 use std::{thread, time::Duration};
 
-const PROFILE_DEFAULT: u8 = 1;
+use super::DEFAULT_PROFILE;
 
 pub fn set(device: &HidDevice, profile: Option<u8>, button: Button, binding: Binding) {
     let mut bfr = [0u8; 65];
-    let profile_id = profile.unwrap_or(PROFILE_DEFAULT);
+    let profile_id = profile.unwrap_or(DEFAULT_PROFILE);
 
     bfr[3] = 0x02;
     bfr[4] = 0x09;

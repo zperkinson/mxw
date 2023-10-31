@@ -1,6 +1,6 @@
 [package]
 name = "mxw"
-authors = ["Ola Næss Kaldestad <mail@okal.no>", "Damian Bednarczyk <me@dxbednarczyk.com>"]
+authors = ["Ola Næss Kaldestad <mail@okal.no>", "Damian Bednarczyk <damian@bednarczyk.xyz>"]
 version = "0.1.1"
 edition = "2021"
 description = """
@@ -17,3 +17,5 @@ Windows program (Glorious Core).
 clap = { version = "4.4", features = ["derive"] }
 hidapi = "2.4"
 colored = "2.0"
+strum = "0.25.0"
+strum_macros = "0.25.3"

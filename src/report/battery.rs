@@ -38,8 +38,8 @@ pub fn get(device: &HidDevice, wired: bool) {
             let charging_status = match percentage {
                 0..=24 => "charging".red(),
                 25..=74 => "charging".yellow(),
-                75..=99 => "charging".green(),
-                100.. => "fully charged".green().bold(),
+                75..=99 => "charging".bright_yellow(),
+                100.. => "fully charged".green(),
             };
             println!("{percentage}% ({charging_status})")
         }
@@ -51,7 +51,7 @@ pub fn get(device: &HidDevice, wired: bool) {
                 bfr_r[1],
                 bfr_r[6],
                 bfr_r[8],
-                "unknown status".red().bold(),
+                "unknown status".red(),
             );
         }
     }

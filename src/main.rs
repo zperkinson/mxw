@@ -1,12 +1,14 @@
 pub mod args;
 pub mod config;
-pub mod libs;
+pub mod lib;
 pub mod report;
+pub mod glorious;
 
 use args::{Args, Config, Kind, Report};
 use clap::Parser;
 use hidapi::HidApi;
-use libs::none::None;
+use lib::none::None;
+use strum::IntoEnumIterator;
 
 fn main() {
     // Parse the command line arguments
@@ -19,23 +21,14 @@ fn main() {
     let device_info = hid_api
         .device_list()
         .filter(|d| {
-            // Glorious' vendor id
-            d.vendor_id() == 0x258A &&
+            d.vendor_id() == glorious::VENDOR_ID &&
 
-            // Product IDs
-            [
-                0x2011, // Model O (wireless)
-                0x2012, // Model D (wireless)
-                0x2013, // Model O- (wireless)
-                0x2022, // Model O (wired)
-                0x2023, // Model D (wired)
-                0x2024  // Model O- (wired)
-            ].contains(&d.product_id()) &&
+            glorious::Device::iter().any(|x| x as u16 == d.product_id()) &&
 
             // Feature report interface
             d.interface_number() == 0x02
         })
-        // Get wired (0x2011) if available
+        // Get wired version of the mouse if available
         .min_by(|a, b| a.product_id().cmp(&b.product_id()))
         .none("no matching device found");
 
@@ -47,7 +40,7 @@ fn main() {
 
     // Act upon command line arguments
     match args.kind {
-        // mow report
+        // mxw report
         Kind::Report(report) => match report {
             // mow report battery
             Report::Battery => report::battery::get(&device, wired),
@@ -56,7 +49,7 @@ fn main() {
             Report::Firmware => report::firmware::get(&device, wired),
         },
 
-        // mow config
+        // mxw config
         Kind::Config(config) => match config {
             // mow config bind ...
             Config::Bind {
@@ -65,43 +58,43 @@ fn main() {
                 binding,
             } => config::bind::set(&device, profile, button, binding),
 
-            // mow config scroll <DIRECTION>
+            // mxw config scroll <DIRECTION>
             Config::Scroll { direction } => config::scroll::set(&device, direction),
 
-            // mow config profile <ID>
+            // mxw config profile <ID>
             Config::Profile { id } => config::profile::set(&device, id),
 
-            // mow config sleep <MINUTES> [SECONDS]
+            // mxw config sleep <MINUTES> [SECONDS]
             Config::Sleep { minutes, seconds } => config::sleep::set(&device, minutes, seconds),
 
-            // mow config led-brightness <WIRED> [WIRELESS]
+            // mxw config led-brightness <WIRED> [WIRELESS]
             Config::LEDBrightness { wired, wireless } => {
                 config::led_brightness::set(&device, wired, wireless)
             }
 
-            // mow config led-effect <EFFECT> ...
+            // mxw config led-effect <EFFECT> ...
             Config::LEDEffect { profile, effect } => {
                 config::led_effect::set(&device, profile, effect)
             }
 
-            // mow config polling-rate <MS>
+            // mxw config polling-rate <MS>
             Config::PollingRate { ms } => config::polling_rate::set(&device, ms),
 
-            // mow config lift-off <MM>
+            // mxw config lift-off <MM>
             Config::LiftOff { mm } => config::lift_off::set(&device, mm),
 
-            // mow config debounce <MS>
+            // mxw config debounce <MS>
             Config::Debounce { profile, ms } => config::debounce::set(&device, profile, ms),
 
-            // mow config dpi-stage <ID>
+            // mxw config dpi-stage <ID>
             Config::DPIStage { profile, id } => config::dpi_stage::set(&device, profile, id),
 
-            // mow config dpi-stages <STAGES>...
+            // mxw config dpi-stages <STAGES>...
             Config::DPIStages { profile, stages } => {
                 config::dpi_stages::set(&device, profile, stages)
             }
 
-            // mow config dpi-colors <COLORS>...
+            // mxw config dpi-colors <COLORS>...
             Config::DPIColors { profile, colors } => {
                 config::dpi_colors::set(&device, profile, colors)
             }

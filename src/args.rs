@@ -1,5 +1,5 @@
-use crate::libs::color::{self, Color};
-use crate::libs::key::{self, Key};
+use crate::lib::color::{self, Color};
+use crate::lib::key::{self, Key};
 use clap::{self, value_parser, Parser, Subcommand, ValueEnum};
 
 #[derive(Parser)]
