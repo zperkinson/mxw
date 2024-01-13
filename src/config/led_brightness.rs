@@ -1,7 +1,10 @@
 use hidapi::HidDevice;
 use std::{thread, time::Duration};
+use crate::lib::getstatus::check_sleep;
 
 pub fn set(device: &HidDevice, wired: u8, wireless: Option<u8>) {
+    check_sleep(device);
+
     let mut bfr = [0u8; 65];
 
     bfr[3] = 0x02;

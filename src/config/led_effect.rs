@@ -3,10 +3,13 @@ use std::process;
 use crate::args::Effect;
 use colored::Colorize;
 use hidapi::HidDevice;
+use crate::lib::getstatus::check_sleep;
 
 use super::DEFAULT_PROFILE;
 
 pub fn set(device: &HidDevice, profile: Option<u8>, effect: Effect) {
+    check_sleep(device);
+
     let mut bfr = [0u8; 65];
 
     let profile_id = profile.unwrap_or(DEFAULT_PROFILE);
