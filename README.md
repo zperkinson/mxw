@@ -25,6 +25,6 @@ Glorious also unfortunately could not provide me with these after I submitted a 
 You can either import this in your flake or just run 
 
 ```nix 
-    nix run github:dxbednarczyk/mxw -- [INSERT_FLAGS_HERE]
-`
+nix run github:dxbednarczyk/mxw -- [INSERT_FLAGS_HERE]
+```
 
