@@ -302,7 +302,7 @@ pub enum Button {
     Scroll,
     Forward,
     Back,
-    DPI,
+    DPIBtn,
     ScrollUp,
     ScrollDown,
 }

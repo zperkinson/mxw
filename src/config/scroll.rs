@@ -1,8 +1,11 @@
 use super::bind;
 use crate::args::{Binding, Button, MouseFn, ScrollDirection};
 use hidapi::HidDevice;
+use crate::lib::getstatus::check_sleep;
 
 pub fn set(device: &HidDevice, direction: ScrollDirection) {
+    check_sleep(device);
+
     for i in 1..=3 {
         match direction {
             ScrollDirection::Default => {
