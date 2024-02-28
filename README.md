@@ -7,7 +7,7 @@ This fork uses updated dependencies, adds support for more devices (see below) a
 
 ## Supported Devices
 - [x] Model O
-    - [ ] Tested
+    - [x] Tested
 - [x] Model D
     - [x] Tested
 - [x] Model O-
@@ -20,3 +20,16 @@ Please, if you have a device that isn't supported, submit a pull request to add 
 I have tried to search for other product IDs to add to this project, but online databases only hold so much.
 
 Glorious also unfortunately could not provide me with these after I submitted a support request.
+
+## Usage with nix 
+You can either import this in your flake or just run 
+
+```nix 
+nix run github:dxbednarczyk/mxw -- [INSERT_FLAGS_HERE]
+```
+
+Example:
+
+```nix 
+nix run github:dxbednarczyk/mxw -- config led-effect off
+```
