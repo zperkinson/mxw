@@ -2,7 +2,7 @@ use hidapi::HidDevice;
 
 use super::DEFAULT_PROFILE;
 
-pub fn set(device: &HidDevice, profile: Option<u8>, stages: Vec<u16>) {
+pub fn set(device: &HidDevice, profile: Option<u8>, stages: Vec<u16>) -> Result<(), anyhow::Error> {
     let mut bfr = [0u8; 65];
 
     let profile_id = profile.unwrap_or(DEFAULT_PROFILE);
@@ -24,5 +24,7 @@ pub fn set(device: &HidDevice, profile: Option<u8>, stages: Vec<u16>) {
         bfr[9 + (4 * i) + 3] = second;
     }
 
-    device.send_feature_report(&bfr).unwrap();
+    device.send_feature_report(&bfr)?;
+
+    Ok(())
 }

@@ -1,8 +1,8 @@
-use crate::util::getstatus::check_sleep;
+use crate::util::status;
 use hidapi::HidDevice;
 
-pub fn set(device: &HidDevice, minutes: u8, seconds: Option<u8>) {
-    check_sleep(device);
+pub fn set(device: &HidDevice, minutes: u8, seconds: Option<u8>) -> Result<(), anyhow::Error> {
+    status::check_sleep(device)?;
 
     let mut buffer = [0u8; 65];
 
@@ -22,5 +22,7 @@ pub fn set(device: &HidDevice, minutes: u8, seconds: Option<u8>) {
         buffer[8] = 0xFF;
     }
 
-    device.send_feature_report(&buffer).unwrap();
+    device.send_feature_report(&buffer)?;
+
+    Ok(())
 }

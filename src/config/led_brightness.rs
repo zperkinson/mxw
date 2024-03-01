@@ -1,9 +1,9 @@
-use crate::util::getstatus::check_sleep;
+use crate::util::status;
 use hidapi::HidDevice;
 use std::{thread, time::Duration};
 
-pub fn set(device: &HidDevice, wired: u8, wireless: Option<u8>) {
-    check_sleep(device);
+pub fn set(device: &HidDevice, wired: u8, wireless: Option<u8>) -> Result<(), anyhow::Error> {
+    status::check_sleep(device)?;
 
     let mut bfr = [0u8; 65];
 
@@ -15,12 +15,14 @@ pub fn set(device: &HidDevice, wired: u8, wireless: Option<u8>) {
 
     bfr[8] = wired;
 
-    device.send_feature_report(&bfr).unwrap();
+    device.send_feature_report(&bfr)?;
 
     thread::sleep(Duration::from_millis(30));
 
     bfr[7] = 0x00;
     bfr[8] = wireless.unwrap_or(wired);
 
-    device.send_feature_report(&bfr).unwrap();
+    device.send_feature_report(&bfr)?;
+
+    Ok(())
 }

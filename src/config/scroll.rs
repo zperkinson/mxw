@@ -1,10 +1,10 @@
 use super::bind;
 use crate::args::{Binding, Button, MouseFn, ScrollDirection};
-use crate::util::getstatus::check_sleep;
+use crate::util::status;
 use hidapi::HidDevice;
 
-pub fn set(device: &HidDevice, direction: ScrollDirection) {
-    check_sleep(device);
+pub fn set(device: &HidDevice, direction: ScrollDirection) -> Result<(), anyhow::Error> {
+    status::check_sleep(device)?;
 
     for i in 1..=3 {
         match direction {
@@ -15,7 +15,7 @@ pub fn set(device: &HidDevice, direction: ScrollDirection) {
                     Some(i),
                     Button::ScrollUp,
                     Binding::Mouse(MouseFn::ScrollUp),
-                );
+                )?;
 
                 // Down => Down
                 bind::set(
@@ -23,7 +23,7 @@ pub fn set(device: &HidDevice, direction: ScrollDirection) {
                     Some(i),
                     Button::ScrollDown,
                     Binding::Mouse(MouseFn::ScrollDown),
-                );
+                )?;
             }
 
             ScrollDirection::Invert => {
@@ -33,7 +33,7 @@ pub fn set(device: &HidDevice, direction: ScrollDirection) {
                     Some(i),
                     Button::ScrollUp,
                     Binding::Mouse(MouseFn::ScrollDown),
-                );
+                )?;
 
                 // Down => Up
                 bind::set(
@@ -41,8 +41,10 @@ pub fn set(device: &HidDevice, direction: ScrollDirection) {
                     Some(i),
                     Button::ScrollDown,
                     Binding::Mouse(MouseFn::ScrollUp),
-                );
+                )?;
             }
         }
     }
+
+    Ok(())
 }

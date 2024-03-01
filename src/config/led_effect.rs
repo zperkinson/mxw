@@ -1,14 +1,12 @@
-use std::process;
-
 use crate::args::Effect;
-use crate::util::getstatus::check_sleep;
-use colored::Colorize;
+use crate::util::status;
+use anyhow::anyhow;
 use hidapi::HidDevice;
 
 use super::DEFAULT_PROFILE;
 
-pub fn set(device: &HidDevice, profile: Option<u8>, effect: Effect) {
-    check_sleep(device);
+pub fn set(device: &HidDevice, profile: Option<u8>, effect: Effect) -> Result<(), anyhow::Error> {
+    status::check_sleep(device)?;
 
     let mut bfr = [0u8; 65];
 
@@ -23,20 +21,20 @@ pub fn set(device: &HidDevice, profile: Option<u8>, effect: Effect) {
         Effect::Glorious { rate } => {
             bfr[4] = 0x05;
             bfr[9] = 0x01;
-            bfr[11] = rate_check(rate, 1);
+            bfr[11] = rate_check(rate, 1)?;
         }
 
         Effect::Cycle { rate } => {
             bfr[4] = 0x05;
             bfr[9] = 0x02;
-            bfr[11] = rate_check(rate, 2);
+            bfr[11] = rate_check(rate, 2)?;
             bfr[12] = 0xFF;
         }
 
         Effect::Pulse { rate, colors } => {
             bfr[4] = (colors.len() as u8) * 3 + 5;
             bfr[9] = 0x03;
-            bfr[11] = rate_check(rate, 3);
+            bfr[11] = rate_check(rate, 3)?;
 
             for i in 0..6 {
                 if i >= colors.len() {
@@ -63,7 +61,7 @@ pub fn set(device: &HidDevice, profile: Option<u8>, effect: Effect) {
         Effect::PulseOne { rate, color } => {
             bfr[4] = 0x08;
             bfr[9] = 0x05;
-            bfr[11] = rate_check(rate, 5);
+            bfr[11] = rate_check(rate, 5)?;
 
             bfr[12] = color.red;
             bfr[12 + 1] = color.green;
@@ -73,13 +71,13 @@ pub fn set(device: &HidDevice, profile: Option<u8>, effect: Effect) {
         Effect::Tail { rate } => {
             bfr[4] = 0x05;
             bfr[9] = 0x06;
-            bfr[11] = rate_check(rate, 6);
+            bfr[11] = rate_check(rate, 6)?;
         }
 
         Effect::Rave { rate, colors } => {
             bfr[4] = (colors.len() as u8) * 3 + 5;
             bfr[9] = 0x07;
-            bfr[11] = rate_check(rate, 7);
+            bfr[11] = rate_check(rate, 7)?;
 
             for i in 0..2 {
                 if i >= colors.len() {
@@ -97,7 +95,7 @@ pub fn set(device: &HidDevice, profile: Option<u8>, effect: Effect) {
         Effect::Wave { rate } => {
             bfr[4] = 0x05;
             bfr[9] = 0x08;
-            bfr[11] = rate_check(rate, 8);
+            bfr[11] = rate_check(rate, 8)?;
         }
 
         Effect::Off => {
@@ -106,27 +104,23 @@ pub fn set(device: &HidDevice, profile: Option<u8>, effect: Effect) {
         }
     }
 
-    device.send_feature_report(&bfr).unwrap();
+    device.send_feature_report(&bfr)?;
+
+    Ok(())
 }
 
 const RATE_DEFAULT: u8 = 40;
 
-fn rate_check(rate: Option<u8>, effect_id: u8) -> u8 {
+fn rate_check(rate: Option<u8>, effect_id: u8) -> Result<u8, anyhow::Error> {
     let rate_unwrapped = rate.unwrap_or(RATE_DEFAULT);
 
     let rate_checked = match rate_unwrapped {
         0..=100 => rate_unwrapped,
-        _ => {
-            println!(
-                "{}: rate must be in the range of 0-100",
-                "error".bold().red()
-            );
-            process::exit(1);
-        }
+        _ => return Err(anyhow!("rate must be in the range of 0-100")),
     };
 
     match effect_id {
-        7 | 8 => (105 - rate_checked) * 2,
-        _ => (105 - rate_checked) / 5,
+        7 | 8 => Ok((105 - rate_checked) * 2),
+        _ => Ok((105 - rate_checked) / 5),
     }
 }

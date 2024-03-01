@@ -11,7 +11,12 @@ use std::{thread, time::Duration};
 
 use super::DEFAULT_PROFILE;
 
-pub fn set(device: &HidDevice, profile: Option<u8>, button: Button, binding: Binding) {
+pub fn set(
+    device: &HidDevice,
+    profile: Option<u8>,
+    button: Button,
+    binding: Binding,
+) -> Result<(), anyhow::Error> {
     let mut bfr = [0u8; 65];
     let profile_id = profile.unwrap_or(DEFAULT_PROFILE);
 
@@ -41,11 +46,16 @@ pub fn set(device: &HidDevice, profile: Option<u8>, button: Button, binding: Bin
         _ => unimplemented!(),
     }
 
-    device.send_feature_report(&bfr).unwrap();
-    set_and_check(device, &mut bfr, 0, false);
+    device.send_feature_report(&bfr)?;
+    set_and_check(device, &mut bfr, 0, false)
 }
 
-pub fn set_and_check(device: &HidDevice, _bfr: &mut [u8], depth: u8, waiting: bool) {
+pub fn set_and_check(
+    device: &HidDevice,
+    _bfr: &mut [u8],
+    depth: u8,
+    waiting: bool,
+) -> Result<(), anyhow::Error> {
     if depth >= 3 {
         println!("{}: failed to bind key", "error".bold().red());
     }
@@ -53,21 +63,21 @@ pub fn set_and_check(device: &HidDevice, _bfr: &mut [u8], depth: u8, waiting: bo
     thread::sleep(Duration::from_millis(100));
 
     if waiting {
-        set_and_check(device, _bfr, depth + 1, true);
+        set_and_check(device, _bfr, depth + 1, true)
     } else {
         let mut bfr = [0u8; 55];
-        device.get_feature_report(&mut bfr).unwrap();
+        device.get_feature_report(&mut bfr)?;
         thread::sleep(Duration::from_millis(40));
 
         match bfr[0] {
             0xA2 => {
-                device.send_feature_report(_bfr).unwrap();
+                device.send_feature_report(_bfr)?;
                 set_and_check(device, _bfr, depth + 1, false)
             }
             0xA0 => set_and_check(device, _bfr, depth + 1, false),
             0xA4 => set_and_check(device, _bfr, depth + 1, true),
 
-            _ => (),
+            _ => Ok(()),
         }
     }
 }

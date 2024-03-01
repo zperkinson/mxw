@@ -1,11 +1,15 @@
 use crate::util::color::Color;
-use crate::util::getstatus::check_sleep;
+use crate::util::status;
 use hidapi::HidDevice;
 
 use super::DEFAULT_PROFILE;
 
-pub fn set(device: &HidDevice, profile: Option<u8>, colors: Vec<Color>) {
-    check_sleep(device);
+pub fn set(
+    device: &HidDevice,
+    profile: Option<u8>,
+    colors: Vec<Color>,
+) -> Result<(), anyhow::Error> {
+    status::check_sleep(device)?;
 
     let mut bfr = [0u8; 65];
 
@@ -24,5 +28,7 @@ pub fn set(device: &HidDevice, profile: Option<u8>, colors: Vec<Color>) {
         bfr[8 + 3 * i + 2] = colors[i].blue;
     }
 
-    device.send_feature_report(&bfr).unwrap();
+    device.send_feature_report(&bfr)?;
+
+    Ok(())
 }

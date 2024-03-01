@@ -12,10 +12,10 @@ use hidapi::HidApi;
 use strum::IntoEnumIterator;
 use util::none::None;
 
-fn main() {
+fn main() -> Result<(), anyhow::Error> {
     let args = Args::parse();
 
-    let hid_api = HidApi::new().unwrap();
+    let hid_api = HidApi::new()?;
 
     let device_info = hid_api
         .device_list()
@@ -30,7 +30,7 @@ fn main() {
 
     let wired = device_info.product_id() <= 0x2013;
 
-    let device = device_info.open_device(&hid_api).unwrap();
+    let device = device_info.open_device(&hid_api)?;
 
     match args.kind {
         // mxw report
@@ -62,12 +62,12 @@ fn main() {
 
             // mxw config led-brightness <WIRED> [WIRELESS]
             Config::LEDBrightness { wired, wireless } => {
-                config::led_brightness::set(&device, wired, wireless);
+                config::led_brightness::set(&device, wired, wireless)
             }
 
             // mxw config led-effect <EFFECT> ...
             Config::LEDEffect { profile, effect } => {
-                config::led_effect::set(&device, profile, effect);
+                config::led_effect::set(&device, profile, effect)
             }
 
             // mxw config polling-rate <MS>
@@ -84,12 +84,12 @@ fn main() {
 
             // mxw config dpi-stages <STAGES>...
             Config::DPIStages { profile, stages } => {
-                config::dpi_stages::set(&device, profile, stages);
+                config::dpi_stages::set(&device, profile, stages)
             }
 
             // mxw config dpi-colors <COLORS>...
             Config::DPIColors { profile, colors } => {
-                config::dpi_colors::set(&device, profile, colors);
+                config::dpi_colors::set(&device, profile, colors)
             }
         },
     }

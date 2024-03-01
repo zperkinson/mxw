@@ -1,11 +1,11 @@
-use crate::util::getstatus::get_bfr_r;
-use crate::util::getstatus::get_status;
+use crate::util::status;
 use colored::Colorize;
 use hidapi::HidDevice;
 
-pub fn get(device: &HidDevice, wired: bool) {
-    let status = get_status(device);
-    let bfr_r = get_bfr_r(device);
+pub fn get(device: &HidDevice, wired: bool) -> Result<(), anyhow::Error> {
+    let status = status::get(device)?;
+    let bfr_r = status::get_buffer(device)?;
+
     let mut percentage = bfr_r[8];
     if percentage == 0 {
         percentage = 1;
@@ -34,4 +34,6 @@ pub fn get(device: &HidDevice, wired: bool) {
             );
         }
     }
+
+    Ok(())
 }
