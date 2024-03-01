@@ -19,7 +19,16 @@ pub fn set(device: &HidDevice, profile: Option<u8>, button: Button, binding: Bin
     bfr[4] = 0x09;
     bfr[5] = 0x03;
     bfr[7] = profile_id;
-    bfr[8] = id_from_btn(button);
+    bfr[8] = match button {
+        Button::Left => 1,
+        Button::Scroll => 3,
+        Button::Right => 2,
+        Button::Forward => 5,
+        Button::Back => 4,
+        Button::DPIBtn => 20,
+        Button::ScrollUp => 16,
+        Button::ScrollDown => 17,
+    };
 
     match binding {
         Binding::Key { kind } => key::set(&mut bfr[10..], kind),
@@ -41,11 +50,11 @@ pub fn set_and_check(device: &HidDevice, _bfr: &mut [u8], depth: u8, waiting: bo
         println!("{}: failed to bind key", "error".bold().red());
     }
 
+    thread::sleep(Duration::from_millis(100));
+
     if waiting {
-        thread::sleep(Duration::from_millis(100));
         set_and_check(device, _bfr, depth + 1, true);
     } else {
-        thread::sleep(Duration::from_millis(100));
         let mut bfr = [0u8; 55];
         device.get_feature_report(&mut bfr).unwrap();
         thread::sleep(Duration::from_millis(40));
@@ -60,18 +69,5 @@ pub fn set_and_check(device: &HidDevice, _bfr: &mut [u8], depth: u8, waiting: bo
 
             _ => (),
         }
-    }
-}
-
-fn id_from_btn(button: Button) -> u8 {
-    match button {
-        Button::Left => 1,
-        Button::Scroll => 3,
-        Button::Right => 2,
-        Button::Forward => 5,
-        Button::Back => 4,
-        Button::DPIBtn => 20,
-        Button::ScrollUp => 16,
-        Button::ScrollDown => 17,
     }
 }

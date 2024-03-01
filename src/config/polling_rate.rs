@@ -1,5 +1,5 @@
+use crate::util::getstatus::check_sleep;
 use hidapi::HidDevice;
-use crate::lib::getstatus::check_sleep;
 
 pub fn set(device: &HidDevice, ms: String) {
     check_sleep(device);

@@ -1,7 +1,7 @@
+use crate::util::getstatus::get_bfr_r;
+use crate::util::getstatus::get_status;
 use colored::Colorize;
 use hidapi::HidDevice;
-use crate::lib::getstatus::get_status;
-use crate::lib::getstatus::get_bfr_r;
 
 pub fn get(device: &HidDevice, wired: bool) {
     let status = get_status(device);

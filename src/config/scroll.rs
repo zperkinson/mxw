@@ -1,7 +1,7 @@
 use super::bind;
 use crate::args::{Binding, Button, MouseFn, ScrollDirection};
+use crate::util::getstatus::check_sleep;
 use hidapi::HidDevice;
-use crate::lib::getstatus::check_sleep;
 
 pub fn set(device: &HidDevice, direction: ScrollDirection) {
     check_sleep(device);

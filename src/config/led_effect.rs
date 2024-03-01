@@ -1,9 +1,9 @@
 use std::process;
 
 use crate::args::Effect;
+use crate::util::getstatus::check_sleep;
 use colored::Colorize;
 use hidapi::HidDevice;
-use crate::lib::getstatus::check_sleep;
 
 use super::DEFAULT_PROFILE;
 

@@ -5,9 +5,9 @@ pub fn set(bfr: &mut [u8], kind: KeyKind) {
     bfr[1] = 0x02;
 
     let (key, modifier) = match kind {
-        KeyKind::ScanCode { key, modifier } => (key, modifier),
-        KeyKind::KeyCode { key, modifier } => (key, modifier),
-        KeyKind::Code { key, modifier } => (key, modifier),
+        KeyKind::ScanCode { key, modifier }
+        | KeyKind::Code { key, modifier }
+        | KeyKind::KeyCode { key, modifier } => (key, modifier),
     };
 
     if let Some(value) = modifier {

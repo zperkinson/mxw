@@ -1,6 +1,6 @@
-use crate::lib::color::Color;
+use crate::util::color::Color;
+use crate::util::getstatus::check_sleep;
 use hidapi::HidDevice;
-use crate::lib::getstatus::check_sleep;
 
 use super::DEFAULT_PROFILE;
 

@@ -1,6 +1,7 @@
 use strum_macros::EnumIter;
 
 pub const VENDOR_ID: u16 = 0x258A;
+pub const INTERFACE: i32 = 0x02;
 
 #[derive(Debug, EnumIter)]
 pub enum Device {
@@ -10,5 +11,5 @@ pub enum Device {
     ModelDMinus = 0x2025,
     WiredModelO = 0x2022,
     WiredModelD = 0x2023,
-    WiredModelOMinus = 0x2024
+    WiredModelOMinus = 0x2024,
 }

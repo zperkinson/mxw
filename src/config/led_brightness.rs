@@ -1,6 +1,6 @@
+use crate::util::getstatus::check_sleep;
 use hidapi::HidDevice;
 use std::{thread, time::Duration};
-use crate::lib::getstatus::check_sleep;
 
 pub fn set(device: &HidDevice, wired: u8, wireless: Option<u8>) {
     check_sleep(device);

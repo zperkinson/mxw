@@ -1,6 +1,6 @@
-use hidapi::HidDevice;
-use crate::lib::getstatus::check_sleep;
 use super::DEFAULT_PROFILE;
+use crate::util::getstatus::check_sleep;
+use hidapi::HidDevice;
 
 pub fn set(device: &HidDevice, profile: Option<u8>, ms: u8) {
     check_sleep(device);

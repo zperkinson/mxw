@@ -1,6 +1,6 @@
-use crate::lib::color::{self, Color};
-use crate::lib::key::{self, Key};
-use clap::{self, value_parser, Parser, Subcommand, ValueEnum};
+use crate::util::color::{self, Color};
+use crate::util::key::{self, Key};
+use clap::{value_parser, Parser, Subcommand, ValueEnum};
 
 #[derive(Parser)]
 #[command(
@@ -349,7 +349,7 @@ pub enum KeyKind {
         key: Key,
 
         /// Optional modifier
-        #[arg(short, long, value_parser(key::parse_scan_code_mod))]
+        #[arg(short, long, value_parser(key::parse_scan_code))]
         modifier: Option<Key>,
     },
 
@@ -359,7 +359,7 @@ pub enum KeyKind {
         key: Key,
 
         /// Optional modifier
-        #[arg(short, long, value_parser(key::parse_key_code_mod))]
+        #[arg(short, long, value_parser(key::parse_key_code))]
         modifier: Option<Key>,
     },
 
@@ -369,7 +369,7 @@ pub enum KeyKind {
         key: Key,
 
         /// Optional modifier
-        #[arg(short, long, value_parser(key::parse_code_mod))]
+        #[arg(short, long, value_parser(key::parse_code))]
         modifier: Option<Key>,
     },
 }

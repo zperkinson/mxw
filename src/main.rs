@@ -1,44 +1,37 @@
+#![warn(clippy::all, clippy::nursery)]
+
 pub mod args;
 pub mod config;
-pub mod lib;
-pub mod report;
 pub mod glorious;
+pub mod report;
+pub mod util;
 
 use args::{Args, Config, Kind, Report};
 use clap::Parser;
 use hidapi::HidApi;
-use lib::none::None;
 use strum::IntoEnumIterator;
+use util::none::None;
 
 fn main() {
-    // Parse the command line arguments
     let args = Args::parse();
 
-    // Interface with platform specific 'hidapi'
     let hid_api = HidApi::new().unwrap();
 
-    // Try to find a matching device
     let device_info = hid_api
         .device_list()
         .filter(|d| {
-            d.vendor_id() == glorious::VENDOR_ID &&
-
-            glorious::Device::iter().any(|x| x as u16 == d.product_id()) &&
-
-            // Feature report interface
-            d.interface_number() == 0x02
+            d.vendor_id() == glorious::VENDOR_ID
+                && glorious::Device::iter().any(|x| x as u16 == d.product_id())
+                && d.interface_number() == glorious::INTERFACE
         })
         // Get wired version of the mouse if available
         .min_by(|a, b| a.product_id().cmp(&b.product_id()))
         .none("no matching device found");
 
-    // Product id indicates whether wired
     let wired = device_info.product_id() <= 0x2013;
 
-    // Connect to the device
     let device = device_info.open_device(&hid_api).unwrap();
 
-    // Act upon command line arguments
     match args.kind {
         // mxw report
         Kind::Report(report) => match report {
@@ -69,12 +62,12 @@ fn main() {
 
             // mxw config led-brightness <WIRED> [WIRELESS]
             Config::LEDBrightness { wired, wireless } => {
-                config::led_brightness::set(&device, wired, wireless)
+                config::led_brightness::set(&device, wired, wireless);
             }
 
             // mxw config led-effect <EFFECT> ...
             Config::LEDEffect { profile, effect } => {
-                config::led_effect::set(&device, profile, effect)
+                config::led_effect::set(&device, profile, effect);
             }
 
             // mxw config polling-rate <MS>
@@ -91,12 +84,12 @@ fn main() {
 
             // mxw config dpi-stages <STAGES>...
             Config::DPIStages { profile, stages } => {
-                config::dpi_stages::set(&device, profile, stages)
+                config::dpi_stages::set(&device, profile, stages);
             }
 
             // mxw config dpi-colors <COLORS>...
             Config::DPIColors { profile, colors } => {
-                config::dpi_colors::set(&device, profile, colors)
+                config::dpi_colors::set(&device, profile, colors);
             }
         },
     }
