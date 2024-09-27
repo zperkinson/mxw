@@ -1,6 +1,6 @@
-Copyright (c) for portions of mxw are held by Ola Næss Kaldestad, 2023 as part of `mow` under the MIT License.
+Copyright (c) for portions of mxw is held by Ola Næss Kaldestad, 2023 as part of `mow` under the MIT License.
 All copyright for mxw including and after commit 24bc0a8[1]
-are held by Damian Bednarczyk <damian@bednarczyk.xyz>, 2023 under the GPLv3 License.
+is held by Damian Bednarczyk <damian@bednarczyk.xyz>, 2023 under the GPLv3 License.
 Both licenses are available below.
 
 [1] https://github.com/dxbednarczyk/mxw/commit/24bc0a81ad09fb4f89b369bfb384adf301a7d90
