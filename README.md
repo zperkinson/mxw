@@ -1,5 +1,5 @@
 # mxw - Model (O/O-/D/D-) Wireless
-Cross platform CLI for configuring Glorious wireless mice.
+Cross platform CLI for configuring Glorious wireless mice, specifically, those that work with Glorious Core V1.
 
 See the original project and it's README at [korkje/mow](https://github.com/korkje/mow).
 
