@@ -1,5 +1,5 @@
 # mxw - Model (O/O-/D/D-) Wireless
-Cross platform CLI for configuring Glorious wireless mice, specifically, those that work with Glorious Core V1.
+Cross platform CLI for configuring Glorious wireless mice.
 
 See the original project and it's README at [korkje/mow](https://github.com/korkje/mow).
 
@@ -15,11 +15,7 @@ This fork uses updated dependencies, adds support for more devices (see below) a
 - [x] Model D-
     - [x] Tested
 
-Please, if you have a device that isn't supported, submit a pull request to add it! You can follow [this guide](https://kb.synology.com/en-ph/DSM/tutorial/How_do_I_check_the_PID_VID_of_my_USB_device) to figure out how to find the relevant info you need.
-
-I have tried to search for other product IDs to add to this project, but online databases only hold so much.
-
-Glorious also unfortunately could not provide me with these after I submitted a support request.
+This project currently only works with these mice, as they are compatible with [Glorious Core v1](https://www.gloriousgaming.com/pages/legacy-software). I don't have a newer device to test with, so if you've got a weekend to waste and no side project to work on, feel free to submit a pull request. [Here](https://github.com/dxbednarczyk/mxw/issues/1#issuecomment-2135500375) may be a good starting point.
 
 ## Usage with nix 
 You can either import this in your flake or just run 
